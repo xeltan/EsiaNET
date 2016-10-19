@@ -250,3 +250,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/EsiaNET/EsiaNET - копия.nuspec
+/EsiaNET/EsiaNET.nuspec
+/EsiaNET/create_package.cmd
+/EsiaNET.Identity/create_package.cmd
+/EsiaNET.Identity/EsiaNET.Identity.nuspec
