@@ -7,3 +7,6 @@ ESIA OAuth 2.0 client to russian government services for .NET framework.
 
 ## Documentation
 Coming soon
+
+## Examples
+Not ready yet
