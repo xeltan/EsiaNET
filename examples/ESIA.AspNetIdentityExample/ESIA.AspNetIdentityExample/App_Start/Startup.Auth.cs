@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using EsiaNET.Identity;
+using EsiaNET.Identity.Provider;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -63,6 +68,21 @@ namespace ESIA.AspNetIdentityExample
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            // Разрешаем использовать в ASP.NET Identity внешнюю авторизацию через ЕСИА
+            app.UseEsiaAuthentication(new EsiaAuthenticationOptions(Esia.GetOptions())
+            {
+                VerifyTokenSignature = true,    // Будем проверять подпись маркера доступа
+                Provider = new EsiaAuthenticationProvider
+                {
+                    OnAuthenticated = context =>    // Сохраним после авторизации маркер доступа в сессии для будущего использования в приложении (HomeController/EsiaPage)
+                    {
+                        HttpContext.Current.Session["esiaToken"] = context.Token;
+
+                        return Task.FromResult<object>(null);
+                    }
+                }
+            });
         }
     }
 }

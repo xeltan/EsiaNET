@@ -1,0 +1,270 @@
+﻿@using EsiaNET
+@{
+    ViewBag.Title = "ЕСИА";
+
+    var personInfo = (PersonInfo)ViewBag.Person;
+    var contacts = (IEnumerable<ContactInfo>)ViewBag.Contacts;
+    var docs = (IEnumerable<DocInfo>)ViewBag.Docs;
+    var addrs = (IEnumerable<AddrInfo>)ViewBag.Addrs;
+    var vehicles = (IEnumerable<VehicleInfo>)ViewBag.Vehicles;
+    var kids = (IEnumerable<PersonInfo>)ViewBag.Kids;
+}
+<h2>@ViewBag.Title.</h2>
+<h3>Данные из ЕСИА</h3>
+<form class="form-horizontal">
+    @if ( personInfo != null )
+    {
+        <h4>Данные пользователя</h4>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Имя</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.FirstName</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Отчество</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.MiddleName</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Фамилия</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.LastName</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Дата рождения</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.BirthDate</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Место рождения</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.BirthPlace</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Пол</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.Gender</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Гражданство</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.Citizenship</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">ИНН</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.Inn</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">СНИЛС</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.Snils</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Trusted</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@personInfo.Trusted</p>
+            </div>
+        </div>
+    }
+    @if ( contacts != null )
+    {
+        <h4>Контакты</h4>
+        foreach ( var contact in contacts )
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label">@contact.ContactType</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@contact.Value (Подтвержден: @contact.Verified)</p>
+                </div>
+            </div>
+        }
+    }
+    @if ( docs != null )
+    {
+        <h4>Документы пользователя</h4>
+        foreach ( var doc in docs )
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Документ</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.DocType</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">ФИО</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.LastName @doc.FirstName</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Подтвержден</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.Verified</p>
+                </div>
+            </div>
+           <div class="form-group">
+                <label class="col-sm-2 control-label">Серия</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.Series</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Номер</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.Number</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Выдан</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.IssueDate</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Кем выдан</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.IssuedBy</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Код подразделения</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.IssueId</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Срок действия</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@doc.ExpiryDate</p>
+                </div>
+            </div>
+        }
+    }
+    @if ( addrs != null )
+    {
+        <h4>Адреса пользователя</h4>
+        foreach ( var addr in addrs )
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Тип адреса</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@addr.AddrType</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Адрес</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@addr.ZipCode, @addr.CountryId, @addr.Region, @addr.City, @addr.Settlement, @addr.District, @addr.Street, @addr.House, @addr.Flat</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Адрес</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@addr.AddressStr</p>
+                </div>
+            </div>
+        }
+    }
+    @if ( vehicles != null )
+    {
+        <h4>Транспортные средства пользователя</h4>
+        foreach ( var vehicle in vehicles )
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Наименование</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@vehicle.Name</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Номер</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@vehicle.RegNumber @vehicle.RegSeries</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">NumberPlate</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@vehicle.NumberPlate</p>
+                </div>
+            </div>
+        }
+    }
+    @if ( kids != null )
+    {
+        <h4>Дети пользователя</h4>
+        foreach ( var child in kids )
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Имя</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.FirstName</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Отчество</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.MiddleName</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Фамилия</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.LastName</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Дата рождения</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.BirthDate</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Место рождения</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.BirthPlace</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Пол</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.Gender</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Гражданство</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.Citizenship</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">ИНН</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.Inn</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">СНИЛС</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.Snils</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Trusted</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">@child.Trusted</p>
+                </div>
+            </div>
+        }
+    }
+</form>
