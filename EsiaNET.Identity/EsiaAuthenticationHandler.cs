@@ -30,6 +30,10 @@ namespace EsiaNET.Identity
             _logger = logger;
         }
 
+        /// <summary>
+        /// Core authentication logic
+        /// </summary>
+        /// <returns>AuthenticationTicket</returns>
         protected override async Task<AuthenticationTicket> AuthenticateCoreAsync()
         {
             AuthenticationProperties properties = null;
@@ -56,6 +60,7 @@ namespace EsiaNET.Identity
                 var queryValues = await ParseRequestAsync(query);
                 string value = queryValues["error"];
 
+                // ESIA error response
                 if ( value != null )
                 {
                     var description = queryValues["error_description"];
@@ -67,6 +72,7 @@ namespace EsiaNET.Identity
 
                 value = queryValues["state"];
 
+                // Checking response state with request state (fron options)
                 if ( value == null || value != Options.EsiaOptions.State.ToString("D") )
                 {
                     _logger.WriteWarning("State parameter is missing or invalid");
@@ -74,6 +80,7 @@ namespace EsiaNET.Identity
                     return new AuthenticationTicket(null, properties);
                 }
 
+                // Authentication code
                 string authCode = queryValues["code"];
 
                 if ( String.IsNullOrWhiteSpace(authCode) )
@@ -83,8 +90,10 @@ namespace EsiaNET.Identity
                     return new AuthenticationTicket(null, properties);
                 }
 
+                // Get access token response from authentication code
                 var tokenResponse = await _esiaClient.GetOAuthTokenAsync(authCode, BuildCallbackUri(""));
 
+                // Check token signature if Options.VerifyTokenSignature is true
                 if ( Options.VerifyTokenSignature && !_esiaClient.VerifyToken(tokenResponse.AccessToken) )
                 {
                     _logger.WriteWarning("Token signature is invalid");
@@ -92,8 +101,10 @@ namespace EsiaNET.Identity
                     return new AuthenticationTicket(null, properties);
                 }
 
+                // Create EsiaToken class instance from token response and set it to esia client
                 _esiaClient.Token = EsiaClient.CreateToken(tokenResponse);
 
+                // Get owner personal information and contacts. If requested scope does not allow some information, corresponding properties will be null
                 var personInfo = await _esiaClient.GetPersonInfoAsync(SendStyles.None);
                 var contactsInfo = await _esiaClient.GetPersonContactsAsync(SendStyles.None);
 
@@ -111,19 +122,20 @@ namespace EsiaNET.Identity
                     ClaimsIdentity.DefaultRoleClaimType);
 
                 if ( personInfo != null )
-                {
+                {   // Set some claims from personal info
                     context.Identity.AddClaim(new Claim(ClaimTypes.Name, personInfo.Name, ClaimValueTypes.String, Options.AuthenticationType));
                     context.Identity.AddClaim(new Claim("urn:esia:trusted", personInfo.Trusted.ToString(), ClaimValueTypes.Boolean, Options.AuthenticationType));
                 }
 
                 if ( contactsInfo != null )
-                {
+                {   // Set email claim from contacts
                     var email = contactsInfo.FirstOrDefault(c => c.ContactType == ContactType.Email);
 
                     if ( email != null )
                         context.Identity.AddClaim(new Claim(ClaimTypes.Email, email.Value, ClaimValueTypes.String, Options.AuthenticationType));
                 }
 
+                // Call provider autenticated callback
                 await Options.Provider.Authenticated(context);
 
                 context.Properties = properties;
@@ -153,7 +165,7 @@ namespace EsiaNET.Identity
             AuthenticationResponseChallenge challenge = Helper.LookupChallenge(Options.AuthenticationType, Options.AuthenticationMode);
 
             if ( challenge != null )
-            {
+            {   // Redirect to ESIA for authentication process
                 string requestPrefix = Request.Scheme + Uri.SchemeDelimiter + Request.Host;
                 var properties = challenge.Properties;
 
@@ -165,6 +177,7 @@ namespace EsiaNET.Identity
                 // Anti-CSRF
                 GenerateCorrelationId(properties);
 
+                // Build redirect uri
                 var redirectUri = _esiaClient.BuildRedirectUri(BuildCallbackUri(Options.DataFormat.Protect(properties)));
                 var redirectContext = new EsiaApplyRedirectContext(Context, Options, properties, redirectUri);
 
@@ -177,7 +190,7 @@ namespace EsiaNET.Identity
         public override async Task<bool> InvokeAsync()
         {
             if ( !String.IsNullOrEmpty(Options.EsiaOptions.CallbackUri) && Options.EsiaOptions.CallbackUri == Request.Path.ToString() )
-            {
+            {   // Callback request from ESIA
                 return await InvokeReturnPathAsync();
             }
 
@@ -236,7 +249,8 @@ namespace EsiaNET.Identity
 
         private string BuildCallbackUri(string properties)
         {
-            return $"{Request.Scheme}://{Request.Host}{RequestPathBase}{Options.EsiaOptions.CallbackUri}?data={Uri.EscapeDataString(properties)}";
+            return string.Format("{0}://{1}{2}{3}?data={4}", Request.Scheme, Request.Host, RequestPathBase, Options.EsiaOptions.CallbackUri,
+                Uri.EscapeDataString(properties));
         }
 
         private static string GetDataParameter(IReadableStringCollection query)

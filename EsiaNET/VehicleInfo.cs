@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace EsiaNET
 {
+    /// <summary>
+    /// Provides owner vehicles
+    /// </summary>
     public class VehicleInfo
     {
         public VehicleInfo(JObject vehicleInfo)
@@ -29,12 +32,24 @@ namespace EsiaNET
 
         public string Id { get; }
 
+        /// <summary>
+        /// Vehicle name
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// Vehicle registration plate
+        /// </summary>
         public string NumberPlate { get; }
 
+        /// <summary>
+        /// Registration certificate seria (серия свидетельства о гос. регистрации)
+        /// </summary>
         public string RegSeries { get; }
 
+        /// <summary>
+        /// Registration certificate number (номер свидетельства о гос. регистрации)
+        /// </summary>
         public string RegNumber { get; }
     }
 }

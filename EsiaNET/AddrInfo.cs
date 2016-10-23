@@ -13,6 +13,9 @@ namespace EsiaNET
         Registration // PRG - адрес регистрации
     }
 
+    /// <summary>
+    /// Provides owner address information
+    /// </summary>
     public class AddrInfo
     {
         public AddrInfo(JObject addrInfo)
@@ -50,12 +53,24 @@ namespace EsiaNET
             }
         }
 
+        /// <summary>
+        /// Address type
+        /// </summary>
         public AddrType AddrType { get; }
 
+        /// <summary>
+        /// Postal index
+        /// </summary>
         public string ZipCode { get; }
 
+        /// <summary>
+        /// Country short code
+        /// </summary>
         public string CountryId { get; }
 
+        /// <summary>
+        /// Address string without house and flat
+        /// </summary>
         public string AddressStr { get; }
 
         public string Building { get; }

@@ -10,13 +10,15 @@ using Microsoft.Owin.Security;
 
 namespace EsiaNET.Identity
 {
-    public static class RequestTypes
-    {
-        public const string Code = "code";
-    }
-
+    /// <summary>
+    /// Options for ESIA authentication middleware
+    /// </summary>
     public class EsiaAuthenticationOptions : AuthenticationOptions
     {
+        /// <summary>
+        /// Initialize a new instance with ESIA client options passed to EsiaClient instance
+        /// </summary>
+        /// <param name="options">Base ESIA options</param>
         public EsiaAuthenticationOptions(EsiaOptions options) : base("ESIA")
         {
             if ( options == null ) throw new ArgumentNullException("options");
@@ -31,8 +33,14 @@ namespace EsiaNET.Identity
             GetUserInfo = true;
         }
 
+        /// <summary>
+        /// ESIA client options
+        /// </summary>
         public EsiaOptions EsiaOptions { get; }
 
+        /// <summary>
+        /// Gets or sets the display name for the ESIA authentication provider
+        /// </summary>
         public string Caption
         {
             get { return Description.Caption; }
@@ -44,8 +52,14 @@ namespace EsiaNET.Identity
         /// </summary>
         public ISecureDataFormat<AuthenticationProperties> DataFormat { get; set; }
 
+        /// <summary>
+        /// Gets or sets provider with callbacks
+        /// </summary>
         public IEsiaAuthenticationProvider Provider { get; set; }
 
+        /// <summary>
+        /// True if middleware needs to verify token signature; otherwise, false
+        /// </summary>
         public bool VerifyTokenSignature { get; set; }
 
         /// <summary>

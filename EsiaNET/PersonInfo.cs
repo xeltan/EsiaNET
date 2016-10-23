@@ -9,6 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace EsiaNET
 {
+    /// <summary>
+    /// Provides owner personal information
+    /// </summary>
     public class PersonInfo
     {
         internal PersonInfo(JObject personInfo)
@@ -51,37 +54,58 @@ namespace EsiaNET
         public string Id { get; }
 
         /// <summary>
-        /// Gets the user name
+        /// User name
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
-        /// Gets the user first name
+        /// User first name
         /// </summary>
-        public string FirstName { get; private set; }
+        public string FirstName { get; }
 
         /// <summary>
-        /// Gets the user last name
+        /// User last name
         /// </summary>
-        public string LastName { get; private set; }
+        public string LastName { get; }
 
         /// <summary>
-        /// Gets the user middle name
+        /// User middle name
         /// </summary>
-        public string MiddleName { get; private set; }
+        public string MiddleName { get; }
 
-        public DateTime? BirthDate { get; private set; }
+        /// <summary>
+        /// User birthdate
+        /// </summary>
+        public DateTime? BirthDate { get; }
 
-        public string BirthPlace { get; private set; }
+        /// <summary>
+        /// User birth place
+        /// </summary>
+        public string BirthPlace { get; }
 
-        public string Gender { get; private set; }
+        /// <summary>
+        /// User Gender
+        /// </summary>
+        public string Gender { get; }
 
-        public bool Trusted { get; private set; }
+        /// <summary>
+        /// True if owner is trusted; otherwise, false
+        /// </summary>
+        public bool Trusted { get; }
 
-        public string Citizenship { get; private set; }
+        /// <summary>
+        /// Citizenship
+        /// </summary>
+        public string Citizenship { get; }
 
-        public string Snils { get; private set; }
+        /// <summary>
+        /// SNILS
+        /// </summary>
+        public string Snils { get; }
 
-        public string Inn { get; private set; }
+        /// <summary>
+        /// INN
+        /// </summary>
+        public string Inn { get; }
     }
 }

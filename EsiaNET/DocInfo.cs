@@ -19,6 +19,9 @@ namespace EsiaNET
         BirthCert // BRTH_CERT - свидетельство о рождении
     }
 
+    /// <summary>
+    /// Provides owner document information
+    /// </summary>
     public class DocInfo
     {
         public DocInfo(JObject docInfo)
@@ -70,24 +73,54 @@ namespace EsiaNET
             }
         }
 
+        /// <summary>
+        /// Document type
+        /// </summary>
         public DocType DocType { get; }
 
+        /// <summary>
+        /// True if document was verified by government org; otherwise, false
+        /// </summary>
         public bool Verified { get; }
 
+        /// <summary>
+        /// Document seria
+        /// </summary>
         public string Series { get; }
 
+        /// <summary>
+        /// Document number
+        /// </summary>
         public string Number { get; }
 
+        /// <summary>
+        /// Issue date (дата выдачи)
+        /// </summary>
         public string IssueDate { get; }
 
+        /// <summary>
+        /// Issue code (код подразделения)
+        /// </summary>
         public string IssueId { get; }
 
+        /// <summary>
+        /// Issued by (кем выдан)
+        /// </summary>
         public string IssuedBy { get; }
 
+        /// <summary>
+        /// Expiration date (срок действия документа)
+        /// </summary>
         public string ExpiryDate { get; }
 
+        /// <summary>
+        /// First name (имя для заграничного паспорта)
+        /// </summary>
         public string FirstName { get; }
 
+        /// <summary>
+        /// Last name (фамилия для заграничного паспорта)
+        /// </summary>
         public string LastName { get; }
     }
 }

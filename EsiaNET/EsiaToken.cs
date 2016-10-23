@@ -9,8 +9,15 @@ using Newtonsoft.Json.Linq;
 
 namespace EsiaNET
 {
+    /// <summary>
+    /// Provides ESIA access token
+    /// </summary>
     public class EsiaToken
     {
+        /// <summary>
+        /// Initialize a new instance with access token string
+        /// </summary>
+        /// <param name="accessToken">access token</param>
         public EsiaToken(string accessToken)
         {
             if ( String.IsNullOrEmpty(accessToken) ) throw new ArgumentNullException("accessToken");
@@ -18,6 +25,13 @@ namespace EsiaNET
             AccessToken = accessToken;
         }
 
+        /// <summary>
+        /// Initialize a new instance with access token parameters
+        /// </summary>
+        /// <param name="accessToken">Access token</param>
+        /// <param name="refreshToken">Refresh token</param>
+        /// <param name="expiresIn">Expires in</param>
+        /// <param name="payload">Payload object to parse</param>
         public EsiaToken(string accessToken, string refreshToken, string expiresIn, JObject payload) : this(accessToken)
         {
             RefreshToken = refreshToken;
@@ -58,20 +72,44 @@ namespace EsiaNET
             }
         }
 
+        /// <summary>
+        /// Access token
+        /// </summary>
         public string AccessToken { get; }
 
+        /// <summary>
+        /// Refresh token
+        /// </summary>
         public string RefreshToken { get; }
 
+        /// <summary>
+        /// Expires in seconds
+        /// </summary>
         public TimeSpan? ExpiresIn { get; }
 
+        /// <summary>
+        /// Begin date and time of access token
+        /// </summary>
         public DateTime? BeginDate { get; }
 
+        /// <summary>
+        /// End date and time of access token
+        /// </summary>
         public DateTime? EndDate { get; }
 
+        /// <summary>
+        /// Create date and time of access token
+        /// </summary>
         public DateTime? CreateDate { get; }
 
+        /// <summary>
+        /// Token identifier
+        /// </summary>
         public string Sid { get; }
 
+        /// <summary>
+        /// Subject identifier (oid)
+        /// </summary>
         public string SbjId { get; }
     }
 }

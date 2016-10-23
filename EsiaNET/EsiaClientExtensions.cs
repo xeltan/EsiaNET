@@ -12,6 +12,12 @@ namespace EsiaNET
 {
     public static class EsiaClientExtensions
     {
+        /// <summary>
+        /// Get personal information about authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>PersonInfo instance</returns>
         public static async Task<PersonInfo> GetPersonInfoAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -19,6 +25,13 @@ namespace EsiaNET
             return await client.GetPersonInfoAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get personal information about specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>PersonInfo instance</returns>
         public static async Task<PersonInfo> GetPersonInfoAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
@@ -29,6 +42,12 @@ namespace EsiaNET
             return new PersonInfo(JObject.Parse(response));
         }
 
+        /// <summary>
+        /// Get contacts of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>ContactInfo array</returns>
         public static async Task<IEnumerable<ContactInfo>> GetPersonContactsAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -36,6 +55,13 @@ namespace EsiaNET
             return await client.GetPersonContactsAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get contacts of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>ContactInfo array</returns>
         public static async Task<IEnumerable<ContactInfo>> GetPersonContactsAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
@@ -77,6 +103,12 @@ namespace EsiaNET
             return result;
         }
 
+        /// <summary>
+        /// Get addresses of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>AddrInfo array</returns>
         public static async Task<IEnumerable<AddrInfo>> GetPersonAddrsAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -84,6 +116,13 @@ namespace EsiaNET
             return await client.GetPersonAddrsAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get addresses of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>AddrInfo array</returns>
         public static async Task<IEnumerable<AddrInfo>> GetPersonAddrsAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
@@ -107,6 +146,12 @@ namespace EsiaNET
             return result;
         }
 
+        /// <summary>
+        /// Get documents of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>DocInfo array</returns>
         public static async Task<IEnumerable<DocInfo>> GetPersonDocsAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -114,6 +159,13 @@ namespace EsiaNET
             return await client.GetPersonDocsAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get documents of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>DocInfo array</returns>
         public static async Task<IEnumerable<DocInfo>> GetPersonDocsAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
@@ -137,6 +189,12 @@ namespace EsiaNET
             return result;
         }
 
+        /// <summary>
+        /// Get children of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>PersonInfo array</returns>
         public static async Task<IEnumerable<PersonInfo>> GetPersonKidsAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -144,6 +202,13 @@ namespace EsiaNET
             return await client.GetPersonKidsAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get children of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>PersonInfo array</returns>
         public static async Task<IEnumerable<PersonInfo>> GetPersonKidsAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
@@ -167,6 +232,12 @@ namespace EsiaNET
             return result;
         }
 
+        /// <summary>
+        /// Get child documents of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>DocInfo array</returns>
         public static async Task<IEnumerable<DocInfo>> GetPersonChildDocsAsync(this EsiaClient client, string childOid, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -174,6 +245,13 @@ namespace EsiaNET
             return await client.GetPersonChildDocsAsync(client.Token.SbjId, childOid, styles);
         }
 
+        /// <summary>
+        /// Get child documents of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>DocInfo array</returns>
         public static async Task<IEnumerable<DocInfo>> GetPersonChildDocsAsync(this EsiaClient client, string oid, string childOid,
             SendStyles styles = SendStyles.Normal)
         {
@@ -198,6 +276,12 @@ namespace EsiaNET
             return result;
         }
 
+        /// <summary>
+        /// Get vehicles of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="styles"></param>
+        /// <returns>VehicleInfo array</returns>
         public static async Task<IEnumerable<VehicleInfo>> GetPersonVehiclesAsync(this EsiaClient client, SendStyles styles = SendStyles.Normal)
         {
             if ( client.Token == null ) throw new ArgumentNullException("Token");
@@ -205,6 +289,13 @@ namespace EsiaNET
             return await client.GetPersonVehiclesAsync(client.Token.SbjId, styles);
         }
 
+        /// <summary>
+        /// Get vehicles of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <param name="styles"></param>
+        /// <returns>VehicleInfo array</returns>
         public static async Task<IEnumerable<VehicleInfo>> GetPersonVehiclesAsync(this EsiaClient client, string oid, SendStyles styles = SendStyles.Normal)
         {
             if ( String.IsNullOrEmpty(oid) ) throw new ArgumentNullException("oid");
