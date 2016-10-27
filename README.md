@@ -17,7 +17,7 @@ Esia.NET состоит из следующих Nuget-пакетов:
 PM> Install-Package EsiaNET
 ```
 Далее работа с ЕСИА осуществляется через класс EsiaClient. При создании экземпляра класса требуется указать параметры подключения к ЕСИА и сведения о системе-клиенте (класс EsiaOptions). Многие параметры имеют значения по умолчанию.
-```
+```C#
 var esiaClient = new EsiaClient(new EsiaOptions
 {
     ClientId = "YOUR_CLIENT_SYSTEM_ID",   // Идентификатор вашей систему. Обязателен
@@ -66,7 +66,7 @@ var tokenResponse = await esiaClient.GetOAuthTokenAsync(authCode);
 ```
 Вы можете проверить подпись полученного маркера доступа:
 ```
-esiaClient.VerifyToken(tokenResponse.AccessToken);
+if ( !esiaClient.VerifyToken(tokenResponse.AccessToken) ) throw new Exception("Token signature is invalid");
 ```
 И установить полученный маркер доступа в экземпляр класса EsiaClient (или сохранить для дальнейшего использования):
 ```
