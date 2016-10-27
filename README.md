@@ -43,7 +43,7 @@ var esiaClient = new EsiaClient(new EsiaOptions
 });
 ```
 В случае, если маркер доступа уже известен, то можно передать его в конструктор вторым параметром
-```
+```C#
 EsiaToken token = <variable>;
 var esiaClient = new EsiaClient(Esia.GetOptions(), token);
 // или
@@ -52,7 +52,7 @@ var esiaClient = new EsiaClient(Esia.GetOptions(), token);
 ```
 #### Авторизация
 Для осуществления авторизации через ЕСИА необходимо перенаправить пользователя на страницу авторизации ЕСИА с необходимыми параметрами. EsiaClient может только сгенерировать правильный адрес перенаправления, далее ваше приложение должно перенаправить пользователя на этот адрес требуемым вам способом. При создании экземпляра EsiaClient в параметрах обязательно требуется указание адреса возврата в ваше приложение (параметр CallbackUri). Ваше приложение, по этому адресу, должно получить ответ от ЕСИА.
-```
+```C#
 var redirectUri = esiaClient.BuildRedirectUri();
 // your redirect logic
 ```
@@ -61,22 +61,22 @@ var redirectUri = esiaClient.BuildRedirectUri();
 #### Возврат в ваше приложение
 После осуществления пользователем авторизации через ЕСИА ваше приложение должно получить ответ по адресу возврата (реализуется вашим приложением). В случае использования EsiaNET.Identity это реализуется автоматически.
 Далее вы должны обработать ответ и получить код авторизации (более подробно написано в методических рекомендациях). Имея код авторизации вы можете получить маркер доступа следующим образом:
-```
+```C#
 var tokenResponse = await esiaClient.GetOAuthTokenAsync(authCode);
 ```
 Вы можете проверить подпись полученного маркера доступа:
-```
+```C#
 if ( !esiaClient.VerifyToken(tokenResponse.AccessToken) ) throw new Exception("Token signature is invalid");
 ```
 И установить полученный маркер доступа в экземпляр класса EsiaClient (или сохранить для дальнейшего использования):
-```
+```C#
 EsiaToken token = EsiaClient.CreateToken(tokenResponse);
 esiaClient.Token = EsiaClient.CreateToken(token);
 ```
 Теперь вы можете получить данные из REST сервисов ЕСИА.
 
 #### Получение данных из ЕСИА
-```
+```C#
 // Получим данные о пользователе
 var personInfo = await esiaClient.GetPersonInfoAsync();
 
@@ -105,7 +105,7 @@ foreach ( var child in kids )
 }
 ```
 Если на предыдущем шаге вы сохранили маркер доступа, то по необходимости вы можете создать экземпляр класса EsiaClient с указанием параметров и маркера доступа и получить данные:
-```
+```C#
 // Создаем ЕСИА клиента с маркером доступа для получения данных
 var esiaClient = new EsiaClient(Esia.GetOptions(), (EsiaToken)esiaToken);
 
