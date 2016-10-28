@@ -112,6 +112,24 @@ var esiaClient = new EsiaClient(Esia.GetOptions(), (EsiaToken)esiaToken);
 // Получим данные о пользователе
 var personInfo = await esiaClient.GetPersonInfoAsync();
 ```
+Универсальный метод для получения данных из ЕСИА
+```C#
+async Task<HttpResponseMessage> SendAsync(HttpMethod method,
+    string requestUri,
+    SendStyles styles = SendStyles.Normal,  // SendStyles.RefreshToken | SendStyles.CheckTokenTime | SendStyles.VerifyToken
+    IList<KeyValuePair<string, string>> requestParams = null,
+    IList<KeyValuePair<string, string>> headers = null)
+```
+Данный метод позволяет выполнить http запрос на сервисы ЕСИА (requestUri) с параметрами requestParams (передаются как FormUrlEncodedContent) и дополнительными headers.
+Если параметр styles содержит значение SendStyles.RefreshToken, то EsiaClient будет использовать refresh token для обновления маркера доступа, в случае если последний просрочен или получен 401 ответ.
+Если параметр styles содержит значение SendStyles.CheckTokenTime, то EsiaClient будет проверять время действия маркера доступа перед отправкой запроса и выбрасывать исключение, если маркер просрочен; и если дополнительно указано значение SendStyles.RefreshToken, то будет обновлен маркер доступа через refresh token.
+Все методы получения данных содержат параметр styles с аналогичным поведением.
+Дополнительные методы:
+```C#
+async Task<string> GetAsync(string requestUri, SendStyles styles = SendStyles.Normal) // Запрос GET, параметры в uri
+sync Task<string> PostAsync(string requestUri, SendStyles styles = SendStyles.Normal,
+    IList<KeyValuePair<string, string>> requestParams = null)   // Запрос POST, параметры FormUrlEncodedContent
+```
 
 ### EsiaNET.Identity
 Coming soon
