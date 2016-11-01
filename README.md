@@ -158,7 +158,7 @@ app.UseEsiaAuthentication(new EsiaAuthenticationOptions(Esia.GetOptions())
     }
 });
 ```
-Здесь Esia.GetOptions() возвращает параметры ЕСИА, которые передаются в EsiaClient. Эти же параметры должны использоваться далее в приложении при работе с ЕСИА через EsiaClient
+Здесь Esia.GetOptions() возвращает параметры ЕСИА, которые передаются в EsiaClient. Эти же параметры должны использоваться далее в приложении при работе с ЕСИА через EsiaClient. Более подробно смотрите в разделе EsiaNET выше
 ```C#
 public class Esia
 {
