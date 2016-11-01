@@ -136,7 +136,8 @@ async Task<string> PostAsync(string requestUri, SendStyles styles = SendStyles.N
 ```
 
 ### EsiaNET.Identity
-OWIN middleware для авторизации через ЕСИА. Зависит от EsiaNET. Использует EsiaNET.EsiaClient для работы с ЕСИА
+OWIN middleware для авторизации через ЕСИА. Зависит от EsiaNET. Использует EsiaNET.EsiaClient для работы с ЕСИА.
+Предоставляет внешний провайдер авторизации через ЕСИА в ASP.NET Identity, подобно авторизации через Google, Facebook, Twitter.
 #### Установка и использование
 Для установки необходимо ввести следующую команду в Package Manager Console:
 ```
