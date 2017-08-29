@@ -209,4 +209,3 @@ var personInfo = await esiaClient.GetPersonInfoAsync();
 
 ## Support
 Добро пожаловать в Issues или почту lettapost@gmail.com.
-Информация здесь наполняется и скоро будет содержать более полную картину.
