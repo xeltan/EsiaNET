@@ -48,12 +48,12 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EsiaNET, Version=0.1.0.0, Culture=neutral, PublicKeyToken=d4606aa8f0194e9d, processorArchitecture=MSIL">
-      <HintPath>..\packages\EsiaNET.0.1.0\lib\net45\EsiaNET.dll</HintPath>
+    <Reference Include="EsiaNET, Version=0.1.0.2, Culture=neutral, PublicKeyToken=d4606aa8f0194e9d, processorArchitecture=MSIL">
+      <HintPath>..\packages\EsiaNET.0.1.0.2\lib\net45\EsiaNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EsiaNET.Identity, Version=0.1.0.0, Culture=neutral, PublicKeyToken=75450ac914abce52, processorArchitecture=MSIL">
-      <HintPath>..\packages\EsiaNET.Identity.0.1.0\lib\net45\EsiaNET.Identity.dll</HintPath>
+    <Reference Include="EsiaNET.Identity, Version=0.1.0.2, Culture=neutral, PublicKeyToken=75450ac914abce52, processorArchitecture=MSIL">
+      <HintPath>..\packages\EsiaNET.Identity.0.1.0.2\lib\net45\EsiaNET.Identity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
