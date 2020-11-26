@@ -6,6 +6,8 @@
 ESIA OAuth 2.0 client to russian government services for .NET framework.
 
 ## Documentation
+Данная реализация поддерживает только классический .NET Framework.
+
 Esia.NET состоит из следующих Nuget-пакетов:
 - EsiaNET - основной http-клиент для работы с ЕСИА;
 - EsiaNET.Identity - OWIN middleware для авторизации через ЕСИА. Зависит от EsiaNET.
