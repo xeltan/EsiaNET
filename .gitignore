@@ -256,3 +256,5 @@ paket-files/
 /EsiaNET.Identity/create_package.cmd
 /EsiaNET.Identity/EsiaNET.Identity.nuspec
 /examples/ESIA.AspNetIdentityExample/ESIA.AspNetIdentityExample/App_Data
+/EsiaNET.AspNetCore.Authentication/create_package.cmd
+/EsiaNET.AspNetCore.Authentication/EsiaNET.AspNetCore.Authentication.nuspec
