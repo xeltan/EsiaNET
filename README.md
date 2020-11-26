@@ -124,13 +124,13 @@ async Task<string> PostAsync(string requestUri,
         () => new X509Certificate2(<путь к сертификату ЕСИА>))
 ```
 #### ГОСТ криптография
-В связи с тем что реализовать использование ГОСТ криптографии в .NET Core крайне проблематично, в пимерах провайдер реализован в виде отдельного .NET Framework веб-приложения.
+В связи с тем что реализовать использование ГОСТ криптографии в .NET Core крайне проблематично, в примерах провайдер реализован в виде отдельного .NET Framework веб-приложения.
 Вы можете использовать свою реализацию. Смотрите пример.
 DefaultSignProvider в текущем виде работает только в Windows и классическом .NET Framework.
 
 Также необходимо иметь специализированное сертифицированное ПО для работы с ГОСТ криптографией.
 ## Examples
-### [ASP.NET Core ESIA authorization example](https://github.com/xeltan/EsiaNET/tree/master/examples/ESIA.AspNetIdentityExample)
+### [ASP.NET Core ESIA authorization example](https://github.com/xeltan/EsiaNET/tree/master/examples)
 
 Пример интеграции Esia.NET и ASP.NET Core для реализации авторизации через ЕСИА и получения данных.
 Вставьте свои данные для работы примера. В файле EsiaNET.Mvc\Startup.cs - данные клиент-системы ЕСИА. В файле SignerApp\Controllers\SignController.cs - серийный номер вашего ГОСТ сертификата.
