@@ -1,10 +1,6 @@
-﻿// EsiaNET version 0.1
-// 
-// Home page: 
-// Author: https://github.com/xeltan
-
-using System;
+﻿using System;
 using System.Globalization;
+using System.Text;
 using Newtonsoft.Json.Linq;
 
 namespace EsiaNET
@@ -23,6 +19,7 @@ namespace EsiaNET
             if ( String.IsNullOrEmpty(accessToken) ) throw new ArgumentNullException("accessToken");
 
             AccessToken = accessToken;
+            Parse(accessToken);
         }
 
         /// <summary>
@@ -31,44 +28,13 @@ namespace EsiaNET
         /// <param name="accessToken">Access token</param>
         /// <param name="refreshToken">Refresh token</param>
         /// <param name="expiresIn">Expires in</param>
-        /// <param name="payload">Payload object to parse</param>
-        public EsiaToken(string accessToken, string refreshToken, string expiresIn, JObject payload) : this(accessToken)
+        public EsiaToken(string accessToken, string refreshToken, string expiresIn) : this(accessToken)
         {
             RefreshToken = refreshToken;
 
-            int expiresValue;
-
-            if ( Int32.TryParse(expiresIn, NumberStyles.Integer, CultureInfo.InvariantCulture, out expiresValue) )
+            if ( Int32.TryParse(expiresIn, NumberStyles.Integer, CultureInfo.InvariantCulture, out int expiresValue) )
             {
                 ExpiresIn = TimeSpan.FromSeconds(expiresValue);
-            }
-
-            if ( payload != null )
-            {
-                Sid = EsiaHelpers.PropertyValueIfExists("urn:esia:sid", payload);
-                SbjId = EsiaHelpers.PropertyValueIfExists("urn:esia:sbj_id", payload);
-
-                double seconds;
-                string value = EsiaHelpers.PropertyValueIfExists("exp", payload);
-
-                if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
-                {
-                    EndDate = EsiaHelpers.DateFromUnixSeconds(seconds);
-                }
-
-                value = EsiaHelpers.PropertyValueIfExists("nbf", payload);
-
-                if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
-                {
-                    BeginDate = EsiaHelpers.DateFromUnixSeconds(seconds);
-                }
-
-                value = EsiaHelpers.PropertyValueIfExists("iat", payload);
-
-                if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
-                {
-                    CreateDate = EsiaHelpers.DateFromUnixSeconds(seconds);
-                }
             }
         }
 
@@ -90,26 +56,79 @@ namespace EsiaNET
         /// <summary>
         /// Begin date and time of access token
         /// </summary>
-        public DateTime? BeginDate { get; }
+        public DateTime? BeginDate { get; private set; }
 
         /// <summary>
         /// End date and time of access token
         /// </summary>
-        public DateTime? EndDate { get; }
+        public DateTime? EndDate { get; private set; }
 
         /// <summary>
         /// Create date and time of access token
         /// </summary>
-        public DateTime? CreateDate { get; }
+        public DateTime? CreateDate { get; private set; }
 
         /// <summary>
         /// Token identifier
         /// </summary>
-        public string Sid { get; }
+        public string Sid { get; private set; }
 
         /// <summary>
         /// Subject identifier (oid)
         /// </summary>
-        public string SbjId { get; }
+        public string SbjId { get; private set; }
+
+        private void Parse(string accessToken)
+        {
+            string[] parts = accessToken.Split('.');
+            string payload = Encoding.UTF8.GetString(Base64Decode(parts[1]));
+            JObject payloadObject = JObject.Parse(payload);
+
+            Sid = EsiaHelpers.PropertyValueIfExists("urn:esia:sid", payloadObject);
+            SbjId = EsiaHelpers.PropertyValueIfExists("urn:esia:sbj_id", payloadObject);
+
+            double seconds;
+            string value = EsiaHelpers.PropertyValueIfExists("exp", payloadObject);
+
+            if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
+            {
+                EndDate = EsiaHelpers.DateFromUnixSeconds(seconds);
+            }
+
+            value = EsiaHelpers.PropertyValueIfExists("nbf", payloadObject);
+
+            if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
+            {
+                BeginDate = EsiaHelpers.DateFromUnixSeconds(seconds);
+            }
+
+            value = EsiaHelpers.PropertyValueIfExists("iat", payloadObject);
+
+            if ( value != null && Double.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) )
+            {
+                CreateDate = EsiaHelpers.DateFromUnixSeconds(seconds);
+            }
+        }
+
+        private static byte[] Base64Decode(string input)
+        {
+            input = input.Replace('-', '+').Replace('_', '/');
+
+            switch ( input.Length % 4 )
+            {
+                case 0:
+                    break;
+                case 2:
+                    input = String.Format("{0}==", input);
+                    break;
+                case 3:
+                    input = String.Format("{0}=", input);
+                    break;
+                default:
+                    throw new Exception("Illegal base64url string!");
+            }
+
+            return Convert.FromBase64String(input); // Standard base64 decoder
+        }
     }
 }

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsiaNET.Mvc", "EsiaNET.Mvc\EsiaNET.Mvc.csproj", "{FD5907B1-E5DD-4D4A-B058-D09695A35308}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignerApp", "SignerApp\SignerApp.csproj", "{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD5907B1-E5DD-4D4A-B058-D09695A35308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5907B1-E5DD-4D4A-B058-D09695A35308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5907B1-E5DD-4D4A-B058-D09695A35308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5907B1-E5DD-4D4A-B058-D09695A35308}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,9 +1,4 @@
-﻿// EsiaNET version 0.1
-// 
-// Home page: 
-// Author: https://github.com/xeltan
-
-using System;
+﻿using System;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
 

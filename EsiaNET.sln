@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsiaNET", "EsiaNET\EsiaNET.csproj", "{70550F97-0C9B-43E9-AF5E-6987BAFC68A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EsiaNET", "EsiaNET\EsiaNET.csproj", "{AFBF605A-6A32-4835-BBD9-DEEE6960FD8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsiaNET.Identity", "EsiaNET.Identity\EsiaNET.Identity.csproj", "{7A5B9A00-FAF1-4E57-B0BD-46CA8D04169B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EsiaNET.AspNetCore.Authentication", "EsiaNET.AspNetCore.Authentication\EsiaNET.AspNetCore.Authentication.csproj", "{AAC98E1D-081C-4F57-8895-C8CCD835881A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0B3B1FFB-A929-4A12-83F6-90FB5631DF0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignerApp", "test\SignerApp\SignerApp.csproj", "{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsiaNET.Mvc", "test\EsiaNET.Mvc\EsiaNET.Mvc.csproj", "{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +19,31 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{70550F97-0C9B-43E9-AF5E-6987BAFC68A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70550F97-0C9B-43E9-AF5E-6987BAFC68A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70550F97-0C9B-43E9-AF5E-6987BAFC68A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70550F97-0C9B-43E9-AF5E-6987BAFC68A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A5B9A00-FAF1-4E57-B0BD-46CA8D04169B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A5B9A00-FAF1-4E57-B0BD-46CA8D04169B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A5B9A00-FAF1-4E57-B0BD-46CA8D04169B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A5B9A00-FAF1-4E57-B0BD-46CA8D04169B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFBF605A-6A32-4835-BBD9-DEEE6960FD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFBF605A-6A32-4835-BBD9-DEEE6960FD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFBF605A-6A32-4835-BBD9-DEEE6960FD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFBF605A-6A32-4835-BBD9-DEEE6960FD8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAC98E1D-081C-4F57-8895-C8CCD835881A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAC98E1D-081C-4F57-8895-C8CCD835881A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAC98E1D-081C-4F57-8895-C8CCD835881A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAC98E1D-081C-4F57-8895-C8CCD835881A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB9EEAC0-75BF-488A-92AA-ED636E7447DF} = {0B3B1FFB-A929-4A12-83F6-90FB5631DF0C}
+		{5CF8A65E-F93E-4B97-8C56-E0630A4C21D8} = {0B3B1FFB-A929-4A12-83F6-90FB5631DF0C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC40C6F7-E2CF-4540-8413-74E63309AD74}
 	EndGlobalSection
 EndGlobal

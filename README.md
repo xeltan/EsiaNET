@@ -6,18 +6,49 @@
 ESIA OAuth 2.0 client to russian government services for .NET framework.
 
 ## Documentation
-Esia.NET состоит из следующих Nuget-пакетов:
-- EsiaNET - основной http-клиент для работы с ЕСИА;
-- EsiaNET.Identity - OWIN middleware для авторизации через ЕСИА. Зависит от EsiaNET.
+Здесь представлена документация по Esia.NET для .NET Core 3.1. Nuget-пакеты версии 1.0 и выше.
 
-### EsiaNET
+Для классического .NET Framework документация и реализация находится в ветке [dot-net-classic](https://github.com/xeltan/EsiaNET/tree/dot-net-classic). Также используйте Nuget-пакеты версии 0.1. 
+
 #### Установка и использование
-Для установки необходимо ввести следующую команду в Package Manager Console:
+Необходимо установить Nuget-пакет EsiaNET.AspNetCore.Authentication:
 ```
-PM> Install-Package EsiaNET
+PM> Install-Package EsiaNET.AspNetCore.Authentication
 ```
-Далее работа с ЕСИА осуществляется через класс EsiaClient. При создании экземпляра класса требуется указать параметры подключения к ЕСИА и сведения о системе-клиенте (класс EsiaOptions). Многие параметры имеют значения по умолчанию.
+Далее добавить ЕСИА провайдер в Startup.ConfigureServices.
+Это внешний провайдер авторизации через ЕСИА в ASP.NET Core, подобно авторизации через Google, Facebook, Twitter.
+ При добавлении требуется указать параметры подключения к ЕСИА и сведения о системе-клиенте. Многие параметры имеют значения по умолчанию.
 ```C#
+services.AddAuthentication()
+        .AddEsia(options =>
+        {
+            options.ClientId = "YOUR_CLIENT_SYSTEM_ID";   // Идентификатор вашей систему. Обязателен
+            options.AuthorizationEndpoint = EsiaConsts.EsiaAuthUrl;   // Адрес перенаправления на страницу предоставления прав доступа в ЕСИА - либо тестовый, либо рабочий. По умолчанию - рабочий https://esia.gosuslugi.ru/aas/oauth2/ac
+            options.TokenEndpoint = EsiaConsts.EsiaTokenUrl;     // https-адрес ЕСИА для получения маркера доступа - либо тестовый, либо рабочий. По умолчанию - рабочий https://esia.gosuslugi.ru/aas/oauth2/te
+            
+            // Провайдер для подписания запроса к ЕСИА и проверки токена. Обязателен
+            // Комментарии ниже
+            options.SignProvider = new SignProvider();
+            options.VerifyTokenSignature = false; // Не проверять подпись возвращемого токена, по умолчанию - false
+            options.SaveTokens = true; // Сохранить токен в AuthenticationProperties, см. официальную документацию по AspNet Core
+
+            // Требуемый scope. Обязателен
+            options.Scope.Add("openid");
+            options.Scope.Add("fullname");
+            options.Scope.Add("id_doc");
+            
+            // Параметры доспупа к REST ЕСИА. Необязательно. По умолчанию использует параметры продуктовой среды.
+            // Для тестовой поменяйте EsiaRestOptions.RestUri на EsiaConsts.EsiaRestTestUrl
+            options.RestOptions = new EsiaRestOptions();
+
+            // Event handlers
+            options.Events.OnCreatingTicket = c =>
+            {
+                var accessToken = c.AccessToken;
+
+                return Task.CompletedTask;
+            };
+        });
 var esiaClient = new EsiaClient(new EsiaOptions
 {
     ClientId = "YOUR_CLIENT_SYSTEM_ID",   // Идентификатор вашей систему. Обязателен
@@ -42,36 +73,10 @@ var esiaClient = new EsiaClient(new EsiaOptions
         () => new X509Certificate2(WebConfigurationManager.AppSettings["EsiaCertFile"]))
 });
 ```
-В случае, если маркер доступа уже известен, то можно передать его в конструктор вторым параметром
+Теперь вы можете пройти процедуру аутентификации через ЕСИА (External login).
+После входа, с помощью маркера доступа можно обращаться к REST ЕСИА.
 ```C#
-EsiaToken token = <variable>;
-var esiaClient = new EsiaClient(Esia.GetOptions(), token);
-// или
-string token = <variable>;
-var esiaClient = new EsiaClient(Esia.GetOptions(), token);
-```
-#### Авторизация
-Для осуществления авторизации через ЕСИА необходимо перенаправить пользователя на страницу авторизации ЕСИА с необходимыми параметрами. EsiaClient может только сгенерировать правильный адрес перенаправления, далее ваше приложение должно перенаправить пользователя на этот адрес требуемым вам способом. При создании экземпляра EsiaClient в параметрах обязательно требуется указание адреса возврата в ваше приложение (параметр CallbackUri). Ваше приложение, по этому адресу, должно получить ответ от ЕСИА.
-```C#
-var redirectUri = esiaClient.BuildRedirectUri();
-// your redirect logic
-```
-Пакет EsiaNET.Identity встраивает логику авторизации (перенаправление в ЕСИА и получение ответа) в ваше приложение автоматически и интегрирует с ASP.NET Identity.
-
-#### Возврат в ваше приложение
-После осуществления пользователем авторизации через ЕСИА ваше приложение должно получить ответ по адресу возврата (реализуется вашим приложением). В случае использования EsiaNET.Identity это реализуется автоматически.
-Далее вы должны обработать ответ и получить код авторизации (более подробно написано в методических рекомендациях). Имея код авторизации вы можете получить маркер доступа следующим образом:
-```C#
-var tokenResponse = await esiaClient.GetOAuthTokenAsync(authCode);
-```
-Вы можете проверить подпись полученного маркера доступа:
-```C#
-if ( !esiaClient.VerifyToken(tokenResponse.AccessToken) ) throw new Exception("Token signature is invalid");
-```
-И установить полученный маркер доступа в экземпляр класса EsiaClient (или сохранить для дальнейшего использования):
-```C#
-EsiaToken token = EsiaClient.CreateToken(tokenResponse);
-esiaClient.Token = EsiaClient.CreateToken(token);
+var esiaClient = new EsiaClient(new EsiaRestOptions(), token);
 ```
 Теперь вы можете получить данные из REST сервисов ЕСИА.
 
@@ -116,96 +121,51 @@ var personInfo = await esiaClient.GetPersonInfoAsync();
 ```C#
 async Task<HttpResponseMessage> SendAsync(HttpMethod method,
     string requestUri,
-    SendStyles styles = SendStyles.Normal,  // SendStyles.RefreshToken | SendStyles.CheckTokenTime | SendStyles.VerifyToken
     IList<KeyValuePair<string, string>> requestParams = null,
     IList<KeyValuePair<string, string>> headers = null)
 ```
 Данный метод позволяет выполнить http запрос на сервисы ЕСИА (requestUri) с параметрами requestParams (передаются как FormUrlEncodedContent) и дополнительными headers.
 
-Если параметр styles содержит значение SendStyles.RefreshToken, то EsiaClient будет использовать refresh token для обновления маркера доступа, в случае если последний просрочен или получен 401 ответ.
-
-Если параметр styles содержит значение SendStyles.CheckTokenTime, то EsiaClient будет проверять время действия маркера доступа перед отправкой запроса и выбрасывать исключение, если маркер просрочен; и если дополнительно указано значение SendStyles.RefreshToken, то будет обновлен маркер доступа через refresh token.
-
-Все методы получения данных содержат параметр styles с аналогичным поведением.
-
 Дополнительные методы:
 ```C#
-async Task<string> GetAsync(string requestUri, SendStyles styles = SendStyles.Normal) // Запрос GET, параметры в uri
-async Task<string> PostAsync(string requestUri, SendStyles styles = SendStyles.Normal,
+async Task<string> GetAsync(string requestUri) // Запрос GET, параметры в uri
+async Task<string> PostAsync(string requestUri,
     IList<KeyValuePair<string, string>> requestParams = null)   // Запрос POST, параметры FormUrlEncodedContent
 ```
+### Провайдер для подписания запроса к ЕСИА
 
-### EsiaNET.Identity
-OWIN middleware для авторизации через ЕСИА. Зависит от EsiaNET. Использует EsiaNET.EsiaClient для работы с ЕСИА.
-Предоставляет внешний провайдер авторизации через ЕСИА в ASP.NET Identity, подобно авторизации через Google, Facebook, Twitter.
-#### Установка и использование
-Для установки необходимо ввести следующую команду в Package Manager Console:
-```
-PM> Install-Package EsiaNET.Identity
-```
-Далее нужно разрешить использовать в ASP.NET Identity внешнюю авторизацию через ЕСИА в OWIN startup class
+Провайдер обязателен. Должен реализовать интерфейс ISignProvider.
+
+Существует DefaultSignProvider, который реализует подпись и проверку через сертификат клиент-системы ЕСИА.
 ```C#
-app.UseEsiaAuthentication(new EsiaAuthenticationOptions(Esia.GetOptions())
-{
-    VerifyTokenSignature = true,    // Будем проверять подпись маркера доступа
-    Provider = new EsiaAuthenticationProvider
+// Провайдер для получения сертификата системы-клиента. Обязан вернуть сертификат. В данном примере сертификат ищется на локальной машине по серийному номеру. Обязателен
+    SignProvider = EsiaAuthenticationOptions.CreateSignProvider(() =>
     {
-        OnAuthenticated = context =>    // Сохраним после авторизации маркер доступа в сессии для будущего использования в приложении
-        {   // или достанем данные прямо здесь
-            HttpContext.Current.Session["esiaToken"] = context.Token;
+        // Будем искать сертификат в личном хранилище на локальной машине
+        X509Store storeMy = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+        storeMy.Open(OpenFlags.OpenExistingOnly);
+        X509Certificate2Collection certColl = storeMy.Certificates.Find(X509FindType.FindBySerialNumber, "SERIAL_ID", false);
 
-            return Task.FromResult<object>(null);
-        }
-    }
-});
+        storeMy.Close();
+
+        return certColl[0];
+    },
+        // Action должен вернуть сертификат ЕСИА тестовый или рабочий. В данном примере ищем сертификат по его пути, указанном в конфигурационном файле
+        () => new X509Certificate2(<путь к сертификату ЕСИА>))
 ```
-Здесь Esia.GetOptions() возвращает параметры ЕСИА, которые передаются в EsiaClient. Эти же параметры должны использоваться далее в приложении при работе с ЕСИА через EsiaClient. Более подробно смотрите в разделе EsiaNET выше
-```C#
-public class Esia
-{
-    public static EsiaOptions GetOptions()
-    {
-        return new EsiaOptions
-        {
-            ClientId = "CLIENT_ID",    // Ваш идентификатор системы-клиента
-            RedirectUri = EsiaConsts.EsiaAuthTestUrl,   // Адрес перенаправления на страницу предоставления прав доступа в ЕСИА - либо тестовый, либо рабочий
-            TokenUri = EsiaConsts.EsiaTokenTestUrl,     // https-адрес ЕСИА для получения маркера доступа - либо тестовый, либо рабочий
-            RestUri = EsiaConsts.EsiaRestTestUrl,       // Адрес REST-сервиса ЕСИА для получения данных - либо тестовый, либо рабочий
-            Scope = "http://esia.gosuslugi.ru/usr_inf", // Область доступа, т.е. запрашиваемые права. Можно указать несколько через пробел
+#### ГОСТ криптография
+В связи с тем что реализовать использование ГОСТ криптографии в .NET Core крайне проблематично, в пимерах провайдер реализован в виде отдельного .NET Framework веб-приложения.
+Вы можете использовать свою реализацию. Смотрите пример.
+DefaultSignProvider в текущем виде работает только в Windows и классическом .NET Framework.
 
-            // Провайдер для получения сертификата системы-клиента. Обязан вернуть сертификат. В данном примере сертификат ищется на локальной машине по серийному номеру
-            SignProvider = EsiaOptions.CreateSignProvider(() =>
-            {
-                // Будем искать сертификат в личном хранилище на локальной машине
-                X509Store storeMy = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-                storeMy.Open(OpenFlags.OpenExistingOnly);
-                X509Certificate2Collection certColl = storeMy.Certificates.Find(X509FindType.FindBySerialNumber, WebConfigurationManager.AppSettings["AppCertSerial"], false);
-
-                storeMy.Close();
-
-                return certColl[0];
-            },
-                // Action должен вернуть сертификат ЕСИА тестовый или рабочий. В данном примере ищем сертификат по его пути, указанном в конфигурационном файле
-                () => new X509Certificate2(WebConfigurationManager.AppSettings["EsiaCertFile"]))
-        };
-    }
-}
-```
-Далее в приложении можно использовать EsiaNET.EsiaClient для работы с данными ЕСИА. Например
-```C#
-// Создаем ЕСИА клиента с маркером доступа для получения данных
-var esiaClient = new EsiaClient(Esia.GetOptions(), (EsiaToken)Session["esiaToken"]);
-
-// Получим данные о пользователе
-var personInfo = await esiaClient.GetPersonInfoAsync();
-```
-Вы можете изучить пример [ASP.NET Identity ESIA authorization example](https://github.com/xeltan/EsiaNET/tree/master/examples/ESIA.AspNetIdentityExample) для понимания использования EsiaNET.Identity
+Также необходимо иметь специализированное сертифицированное ПО для работы с ГОСТ криптографией.
 ## Examples
-### [ASP.NET Identity ESIA authorization example](https://github.com/xeltan/EsiaNET/tree/master/examples/ESIA.AspNetIdentityExample)
+### [ASP.NET Core ESIA authorization example](https://github.com/xeltan/EsiaNET/tree/master/examples/ESIA.AspNetIdentityExample)
 
-Пример интеграции Esia.NET и ASP.NET Identity для реализации авторизации через ЕСИА и получения данных.
-
-Приложение создано из стандартного шаблона ASP.NET MVC Visual Studio. Вся настройка ЕСИА находится в файлах App_Start/Esia.cs и App_Start/Startup.Auth.cs, получение данных - в файле Controllers/HomeController.cs. Для запуска примера необходимо установить необходимые параметры вашей системы-клиента в файле App_Start/Esia.cs - это идентификатор системы и сертификат, а также сертификат ЕСИА (тестовый или рабочий).
+Пример интеграции Esia.NET и ASP.NET Core для реализации авторизации через ЕСИА и получения данных.
+Вставьте свои данные для работы примера. В файле EsiaNET.Mvc\Startup.cs - данные клиент-системы ЕСИА. В файле SignerApp\Controllers\SignController.cs - серийный номер вашего ГОСТ сертификата.
+Как писалось рание из-за проблем ГОСТ-криптографии в .NET Core, подпись и проверка реализованы в отдельном .Net Framework приложении SignerApp. Для работы примера оба приложения должны быть запущены.
+Стартовый проект - EsiaNET.Mvc.
 
 ## Support
 Добро пожаловать в Issues или почту lettapost@gmail.com.

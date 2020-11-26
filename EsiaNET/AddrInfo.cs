@@ -1,9 +1,4 @@
-﻿// EsiaNET version 0.1
-// 
-// Home page: 
-// Author: https://github.com/xeltan
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace EsiaNET
 {
