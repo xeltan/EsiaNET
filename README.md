@@ -87,14 +87,6 @@ foreach ( var child in kids )
     var childDoc = await esiaClient.GetPersonChildDocsAsync(child.Id);
 }
 ```
-Если на предыдущем шаге вы сохранили маркер доступа, то по необходимости вы можете создать экземпляр класса EsiaClient с указанием параметров и маркера доступа и получить данные:
-```C#
-// Создаем ЕСИА клиента с маркером доступа для получения данных
-var esiaClient = new EsiaClient(Esia.GetOptions(), (EsiaToken)esiaToken);
-
-// Получим данные о пользователе
-var personInfo = await esiaClient.GetPersonInfoAsync();
-```
 Универсальный метод для получения данных из ЕСИА
 ```C#
 async Task<HttpResponseMessage> SendAsync(HttpMethod method,
