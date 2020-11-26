@@ -49,29 +49,7 @@ services.AddAuthentication()
                 return Task.CompletedTask;
             };
         });
-var esiaClient = new EsiaClient(new EsiaOptions
-{
-    ClientId = "YOUR_CLIENT_SYSTEM_ID",   // Идентификатор вашей систему. Обязателен
-    Scope = "fullname id_doc",  // Требуемый scope. Обязателен
-    CallbackUri = "/your_app_uri",  // Адрес возврата в ваше приложение после авторизации ЕСИА.
-    RedirectUri = EsiaConsts.EsiaAuthTestUrl,   // Адрес перенаправления на страницу предоставления прав доступа в ЕСИА - либо тестовый, либо рабочий. По умолчанию - рабочий https://esia.gosuslugi.ru/aas/oauth2/ac
-    TokenUri = EsiaConsts.EsiaTokenTestUrl,     // https-адрес ЕСИА для получения маркера доступа - либо тестовый, либо рабочий. По умолчанию - рабочий https://esia.gosuslugi.ru/aas/oauth2/te
-    RestUri = EsiaConsts.EsiaRestTestUrl,       // Адрес REST-сервиса ЕСИА для получения данных - либо тестовый, либо рабочий. По умолчанию - рабочий https://esia.gosuslugi.ru/rs
-    // Провайдер для получения сертификата системы-клиента. Обязан вернуть сертификат. В данном примере сертификат ищется на локальной машине по серийному номеру. Обязателен
-    SignProvider = EsiaOptions.CreateSignProvider(() =>
-    {
-        // Будем искать сертификат в личном хранилище на локальной машине
-        X509Store storeMy = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-        storeMy.Open(OpenFlags.OpenExistingOnly);
-        X509Certificate2Collection certColl = storeMy.Certificates.Find(X509FindType.FindBySerialNumber, "SERIAL_ID", false);
 
-        storeMy.Close();
-
-        return certColl[0];
-    },
-        // Action должен вернуть сертификат ЕСИА тестовый или рабочий. В данном примере ищем сертификат по его пути, указанном в конфигурационном файле
-        () => new X509Certificate2(WebConfigurationManager.AppSettings["EsiaCertFile"]))
-});
 ```
 Теперь вы можете пройти процедуру аутентификации через ЕСИА (External login).
 После входа, с помощью маркера доступа можно обращаться к REST ЕСИА.
