@@ -8,7 +8,7 @@
     <Title>Esia.NET ASP.NET Core Authentication provider</Title>
     <Authors>Alexey Zakharov</Authors>
     <PackageTags>aspnetcore;authentication;oauth;security;esia</PackageTags>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/xeltan/EsiaNET</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/xeltan/EsiaNET/master/LICENSE</PackageLicenseUrl>
