@@ -9,11 +9,14 @@
         <PublicSign>true</PublicSign>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageProjectUrl>https://github.com/xeltan/EsiaNET</PackageProjectUrl>
-        <PackageLicenseUrl>https://raw.githubusercontent.com/xeltan/EsiaNET/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/xeltan/EsiaNET</RepositoryUrl>
         <Authors>Alexey Zakharov</Authors>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
