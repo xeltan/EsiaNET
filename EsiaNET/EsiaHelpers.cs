@@ -12,6 +12,12 @@ namespace EsiaNET
         {
             return dictionary.ContainsKey(property) ? dictionary[property].ToString() : null;
         }
+        public static bool PropertyBoolValueIfExists(string property, IDictionary<string, JToken> dictionary)
+        {
+            var value = PropertyValueIfExists(property, dictionary);
+
+            return !string.IsNullOrWhiteSpace(value) && value.ToLowerInvariant() == "true";
+        }
 
         public static DateTime DateFromUnixSeconds(double seconds)
         {
