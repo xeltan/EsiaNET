@@ -6,7 +6,7 @@
 ESIA OAuth 2.0 client to russian government services for .NET framework.
 
 ## Documentation
-Здесь представлена документация по Esia.NET для .NET Core 3.1. Nuget-пакеты версии 1.0 и выше.
+Здесь представлена документация по Esia.NET для .NET Core 3.1 и выше. Nuget-пакеты версии 1.0 и выше.
 
 Для классического .NET Framework документация и реализация находится в ветке [dot-net-classic](https://github.com/xeltan/EsiaNET/tree/dot-net-classic). Также используйте Nuget-пакеты версии 0.1. 
 
@@ -15,6 +15,8 @@ ESIA OAuth 2.0 client to russian government services for .NET framework.
 ```
 PM> Install-Package EsiaNET.AspNetCore.Authentication
 ```
+Версия пакета 6.0.0 поддерживает .NET Core 3.1, .NET 5 и .NET 6.
+
 Далее добавить ЕСИА провайдер в Startup.ConfigureServices.
 Это внешний провайдер авторизации через ЕСИА в ASP.NET Core, подобно авторизации через Google, Facebook, Twitter.
  При добавлении требуется указать параметры подключения к ЕСИА и сведения о системе-клиенте. Многие параметры имеют значения по умолчанию.

@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/xeltan/EsiaNET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/xeltan/EsiaNET</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageVersion>6.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
