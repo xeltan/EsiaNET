@@ -11,10 +11,13 @@
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/xeltan/EsiaNET</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/xeltan/EsiaNET/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/xeltan/EsiaNET</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EsiaNET\EsiaNET.csproj" />
   </ItemGroup>
