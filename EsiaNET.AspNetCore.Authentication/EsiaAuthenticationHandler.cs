@@ -155,7 +155,7 @@ namespace EsiaNET.AspNetCore.Authentication
             if ( personInfo != null )
             {
                 // Set some claims from personal info
-                if (String.IsNullOrEmpty(personInfo.Name))
+                if (!String.IsNullOrEmpty(personInfo.Name))
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Name, personInfo.Name, ClaimValueTypes.String, Scheme.Name));
                 }
