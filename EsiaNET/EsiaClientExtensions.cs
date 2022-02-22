@@ -322,5 +322,60 @@ namespace EsiaNET
 
             return result;
         }
+
+        /// <summary>
+        /// Get vehicles of authorized user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns>VehicleInfo array</returns>
+        public static Task<IEnumerable<PersonRole>> GetPersonRolesAsync(this EsiaClient client)
+        {
+            if (client.Token == null)
+            {
+                throw new ArgumentNullException("Token");
+            }
+
+            return client.GetPersonRolesAsync(client.Token.SbjId);
+        }
+
+        /// <summary>
+        /// Get person roles of specified user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="oid">User oid</param>
+        /// <returns>VehicleInfo array</returns>
+        public static async Task<IEnumerable<PersonRole>> GetPersonRolesAsync(this EsiaClient client, string oid)
+        {
+            if (string.IsNullOrEmpty(oid))
+            {
+                throw new ArgumentNullException(nameof(oid));
+            }
+
+            var uri = $"{EsiaHelpers.NormalizeUri(client.Options.RestUri, client.Options.PrnsSfx)}{oid}/roles";
+            var result = new List<PersonRole>();
+            var response = await client.GetAsync(uri);
+
+            if (response == null)
+            {
+                return result;
+            }
+            
+            IDictionary<string, JToken> vehicleDictionary = JObject.Parse(response);
+
+            if (!vehicleDictionary.ContainsKey("elements"))
+            {
+                return result;
+            }
+            
+            foreach ( var vehicle in vehicleDictionary["elements"] )
+            {
+                if (vehicle is JObject personRole)
+                {
+                    result.Add(new PersonRole(personRole));
+                }
+            }
+
+            return result;
+        }
     }
 }
